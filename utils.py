@@ -784,6 +784,8 @@ def map_pred(
     return map, f_measure
 
 def crop_pic(bound_box, img):
+    #Input: List of bouding boxes and a img
+    #Return list of image. One image for each bounding box
     images = []
     for box in bound_box: 
         height = box[1][1]
@@ -797,6 +799,9 @@ def crop_pic(bound_box, img):
     return images
 
 def load_labels_test(rootpath):
+    #Input path to folder containing labels
+    #Used for drawing labels on input images
+    #Returns list of labels of bounding boxes [cls, 1.0, x1, y1, width, height]
     ret_label = []
     counter = 0
     for root, dirs, files in os.walk(rootpath, topdown=True):
@@ -822,6 +827,8 @@ def load_labels_test(rootpath):
     return ret_label
 
 def load_labels(rootpath):
+    #Input path to folder containing labels
+    #Returns list of labels of bounding boxes [cls, x1, y1, width, height]
     ret_label = []
     counter = 0
     for root, dirs, files in os.walk(rootpath, topdown=True):
@@ -845,7 +852,9 @@ def load_labels(rootpath):
     return ret_label
 
 def draw_boxes(bboxes, image):
-
+    #Input: list of bounding boxes [cls, prob, x1, y1, width, heigh] and a image
+    #Draws all bounding boxes on the image using pyplot
+    #No return
     """CLASSES = [
     "person",
     "car",
@@ -898,6 +907,8 @@ def draw_boxes(bboxes, image):
     pyplot.show()
 
 def load_images_from_folder(folder):
+    #Input path to folder containing images
+    #Return list of images
     images = []
     for root, dirs, files in os.walk(folder, topdown=True):
         for name in sorted(files):

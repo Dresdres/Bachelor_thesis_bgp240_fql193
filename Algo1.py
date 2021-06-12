@@ -1,8 +1,10 @@
 import numpy as np
 import time
 import cv2 as cv2
+#Note that denotion of height and width has been reversed by mistake throughout this file
 
 def step1(ex_M, pixel_thresh):
+
     w = ex_M.shape[1]
     h = ex_M.shape[0]
 
@@ -181,21 +183,6 @@ def init_idx_arr(w,h):
     return index
 
 def Algorithm1(ex_M, pixel_thresh):
-    """
-    t0 = time.time()
-    index_list, ex_list = step1(ex_M, pixel_thresh)
-    t1 = time.time()
-    print("Algo step1 time:" , (t1-t0), "amount of boxes:", (len(ex_list)))
-    t0 = time.time()
-    index_list2, ex_list2 = step2(index_list, ex_list, pixel_thresh)
-    t1 = time.time()
-    print("Algo step2 time:" , (t1-t0), "amount of boxes:", (len(ex_list2)))
-    t0 = time.time()
-    index_list3, ex_list3 = step3(index_list2, ex_list2, pixel_thresh)
-    t1 = time.time()
-    print("Algo step3 time:" , (t1-t0), "amount of boxes:", (len(ex_list3)))
-    t0 = time.time()
-    """
 
     index_list, ex_list = step1(ex_M, pixel_thresh)
     index_list2, ex_list2 = step2(index_list, ex_list, pixel_thresh)
@@ -208,54 +195,14 @@ def Algorithm1(ex_M, pixel_thresh):
         length2 = len(x[length]) -1
         maxx1 = x[length][length2][0], x[length][length2][1]
         b_box.append([minx1, maxx1])
-    #print(len(b_box))
     
-    """
-    t1 = time.time()
-    print("Algo step4 time:" + str(t1-t0))
-    t0 = time.time()
-    """
     return b_box
 
-#sqaurification
-def sqaure_crop(c_frame):
-    c_frame = c_frame.tolist()
-    w, h = len(c_frame), len(c_frame[0])
-    diff = 0
-    black = [0,0,0]
-    if w < h:
-        diff = h - w
-        #frame_coords[1][0] =
-        blacks = [black] * h
-        for i in range(diff):
-            c_frame.append(blacks)
-        w, h = len(c_frame), len(c_frame[0])
-        bbox = [w,h]
-        c_frame = np.array(c_frame).astype(np.uint8)
-        return c_frame, bbox
 
-    else:
-        diff = w - h
-        for i in range(w):
-            for _ in range((w-1), (diff + w -1)):
-                c_frame[i].append(black)
-    c_frame = np.array(c_frame).astype(np.uint8)
-    w, h = len(c_frame), len(c_frame[0])
-    bbox = [w,h]
-    return c_frame, bbox
-    """
-    else:
-        diff = w - h
-        blacks = [black] * diff
-        for i in range(w):
-            c_frame[i].append(blacks)
-    bbox = [[0,0],[w,h]]
-    c_frame = np.array(c_frame)
-    c_frame = c_frame.astype(np.uint8)
-    return c_frame, bbox
-    """
 
 def size_up(c_frame, size):
+    #Input: frame and a size in pixels.
+    #Return: The frame plotted in the middle of a black image.
     w, h = len(c_frame), len(c_frame[0])
 
     full = np.full((size, size, 3), (0,0,0),dtype=np.uint8)
@@ -267,33 +214,7 @@ def size_up(c_frame, size):
     bbox = [yy,xx]
     return full, bbox
 
-"""def scale_crop_bbox(bound_box, img, scale):
-    bboxes = []
-    h, w, c = np.shape(img)
-    for box in bound_box:
-        height = box[1][1]
-        y_off = box[0][1]
-        width = box[1][0]
-        x_off = box[0][0]
-        
-        height = box[1][1]
-        y_off = box[0][1]
-        down_scale = (1-(1 - scale))
-        if math.floor(box[0][1] - down_scale * (height - box[0][1])) > 0:
-            y_off = math.floor(box[0][1] - (1 - scale) * (height - box[0][1]))
-        
-        if math.floor(box[1][1] * scale) < h:
-            height = math.floor(box[1][1] * scale)
-        width = box[1][0]
-        x_off = box[0][0] 
-        if math.floor(box[0][0] - down_scale * (width - box[0][0])) > 0:
-            x_off = math.floor(box[0][0] - (1 - scale) * (width - box[0][0]))
-        if math.floor(box[1][0] * scale) < w:
-            width = math.floor(box[1][0] * scale)
-        bboxes.append([(x_off, width),(y_off, height)])
-    return bboxes"""
 
-# https://learnopencv.com/optical-flow-in-opencv/
 def scale_bboxes(bbox, ori_frame_shape, frame_box, sqaure_shape):
     #Scales bounding boxes to original frame from 
     #bounding boxes given by model from cropped squared frame

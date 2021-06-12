@@ -74,14 +74,12 @@ def CNN(model, cropped_frames, Other_bounding_box, CONF_THRESHOLD, NMS_IOU_THRES
 
 def main():
 
-    #Path for frames of testing
     paths = ['test_frames/test_I_IL_01', 'test_frames/test_I_SI_01', 'test_frames/test_O_OP_01', 
             'test_frames/test_O_CM_01', 'test_frames/test_O_OF_01']
     data_sets = []
     for p in paths:
         data_sets.append(utils.load_images_from_folder(p))
 
-    #Path for labels of testing
     paths_label = ['test_labels/label_I_IL_01', 'test_labels/label_I_SI_01', 'test_labels/label_O_OP_01', 
                     'test_labels/label_O_CM_01', 'test_labels/label_O_OF_01']
     GTs = []
@@ -170,10 +168,10 @@ def main():
                 #### Present results for each frame ####
 
                 #Uncomment the following line to see the prediction on the frame
-                #draw_boxes(bboxes, new_frame)
+                utils.draw_boxes(bboxes, new_frame)
 
                 #Uncomment the following line to see the label on the frame
-                #draw_boxes(gt_show[count - 1], new_frame)
+                #utils.draw_boxes(gt_show[count - 1], new_frame)
                 save_bbox = bboxes.copy()
                 for box in save_bbox:
                     col_bboxes.append([count] + box)
